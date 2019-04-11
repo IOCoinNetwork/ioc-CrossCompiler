@@ -1,0 +1,732 @@
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/alert.cpp iocoin/src/alert.cpp
+--- iocoind/src/alert.cpp	2019-03-31 23:08:43.515548123 -0500
++++ iocoin/src/alert.cpp	2019-03-31 23:08:43.959548104 -0500
+@@ -53,8 +53,8 @@
+     return strprintf(
+         "CAlert(\n"
+         "    nVersion     = %d\n"
+-        "    nRelayUntil  = %"PRId64"\n"
+-        "    nExpiration  = %"PRId64"\n"
++        "    nRelayUntil  = %" PRId64 "\n"
++        "    nExpiration  = %" PRId64 "\n"
+         "    nID          = %d\n"
+         "    nCancel      = %d\n"
+         "    setCancel    = %s\n"
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/bitcoinrpc.cpp iocoin/src/bitcoinrpc.cpp
+--- iocoind/src/bitcoinrpc.cpp	2019-03-31 23:09:39.547545766 -0500
++++ iocoin/src/bitcoinrpc.cpp	2019-03-31 23:08:43.959548104 -0500
+@@ -484,7 +484,7 @@
+             "HTTP/1.1 %d %s\r\n"
+             "Date: %s\r\n"
+             "Connection: %s\r\n"
+-            "Content-Length: %"PRIszu"\r\n"
++            "Content-Length: %" PRIszu "\r\n"
+             "Content-Type: application/json\r\n"
+             "Server: iocoin-json-rpc/%s\r\n"
+             "\r\n"
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/db.cpp iocoin/src/db.cpp
+--- iocoind/src/db.cpp	2019-03-31 23:08:43.515548123 -0500
++++ iocoin/src/db.cpp	2019-03-31 23:08:43.959548104 -0500
+@@ -465,7 +465,7 @@
+             else
+                 mi++;
+         }
+-        printf("DBFlush(%s)%s ended %15"PRId64"ms\n", fShutdown ? "true" : "false", fDbEnvInit ? "" : " db not started", GetTimeMillis() - nStart);
++        printf("DBFlush(%s)%s ended %15" PRId64 "ms\n", fShutdown ? "true" : "false", fDbEnvInit ? "" : " db not started", GetTimeMillis() - nStart);
+         if (fShutdown)
+         {
+             char** listp;
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/init.cpp iocoin/src/init.cpp
+--- iocoind/src/init.cpp	2019-03-31 23:09:39.551545766 -0500
++++ iocoin/src/init.cpp	2019-03-31 23:08:43.959548104 -0500
+@@ -743,7 +743,7 @@
+         printf("Shutdown requested. Exiting.\n");
+         return false;
+     }
+-    printf(" block index %15"PRId64"ms\n", GetTimeMillis() - nStart);
++    printf(" block index %15" PRId64 "ms\n", GetTimeMillis() - nStart);
+ 
+     if (GetBoolArg("-printblockindex") || GetBoolArg("-printblocktree"))
+     {
+@@ -868,7 +868,7 @@
+     }
+ 
+     printf("%s", strErrors.str().c_str());
+-    printf(" wallet      %15"PRId64"ms\n", GetTimeMillis() - nStart);
++    printf(" wallet      %15" PRId64 "ms\n", GetTimeMillis() - nStart);
+ 
+     RegisterWallet(pwalletMain);
+ 
+@@ -904,7 +904,7 @@
+           printf("Rescanning last %i blocks (from block %i)...\n", pindexBest->nHeight - pindexRescan->nHeight, pindexRescan->nHeight);
+           nStart = GetTimeMillis();
+           pwalletMain->ScanForWalletTransactions(pindexRescan, true);
+-          printf(" rescan      %15"PRId64"ms\n", GetTimeMillis() - nStart);
++          printf(" rescan      %15" PRId64 "ms\n", GetTimeMillis() - nStart);
+         }
+ 
+         if(GetBoolArg("-xscan") || GetBoolArg("-upgradewallet"))
+@@ -952,7 +952,7 @@
+             printf("Invalid or missing peers.dat; recreating\n");
+     }
+ 
+-    printf("Loaded %i addresses from peers.dat  %"PRId64"ms\n",
++    printf("Loaded %i addresses from peers.dat  %" PRId64 "ms\n",
+            addrman.size(), GetTimeMillis() - nStart);
+ 
+ 
+@@ -963,11 +963,11 @@
+     RandAddSeedPerfmon();
+ 
+     //// debug print
+-    printf("mapBlockIndex.size() = %"PRIszu"\n",   mapBlockIndex.size());
++    printf("mapBlockIndex.size() = %" PRIszu "\n",   mapBlockIndex.size());
+     printf("nBestHeight = %d\n",            nBestHeight);
+-    printf("setKeyPool.size() = %"PRIszu"\n",      pwalletMain->setKeyPool.size());
+-    printf("mapWallet.size() = %"PRIszu"\n",       pwalletMain->mapWallet.size());
+-    printf("mapAddressBook.size() = %"PRIszu"\n",  pwalletMain->mapAddressBook.size());
++    printf("setKeyPool.size() = %" PRIszu "\n",      pwalletMain->setKeyPool.size());
++    printf("mapWallet.size() = %" PRIszu "\n",       pwalletMain->mapWallet.size());
++    printf("mapAddressBook.size() = %" PRIszu "\n",  pwalletMain->mapAddressBook.size());
+ 
+     if (!NewThread(StartNode, NULL))
+         InitError(_("Error: could not start node"));
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/irc.cpp iocoin/src/irc.cpp
+--- iocoind/src/irc.cpp	2019-03-31 23:08:43.519548122 -0500
++++ iocoin/src/irc.cpp	2019-03-31 23:08:43.959548104 -0500
+@@ -260,7 +260,7 @@
+         if (!fNoListen && GetLocal(addrLocal, &addrIPv4) && nNameRetry<3)
+             strMyName = EncodeAddress(GetLocalAddress(&addrConnect));
+         if (strMyName == "")
+-            strMyName = strprintf("x%"PRIu64"", GetRand(1000000000));
++            strMyName = strprintf("x%" PRIu64 "", GetRand(1000000000));
+ 
+         Send(hSocket, strprintf("NICK %s\r", strMyName.c_str()).c_str());
+         Send(hSocket, strprintf("USER %s 8 * : %s\r", strMyName.c_str(), strMyName.c_str()).c_str());
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/kernel.cpp iocoin/src/kernel.cpp
+--- iocoind/src/kernel.cpp	2019-03-31 23:08:43.519548122 -0500
++++ iocoin/src/kernel.cpp	2019-03-31 23:08:43.959548104 -0500
+@@ -135,7 +135,7 @@
+         return error("ComputeNextStakeModifier: unable to get last modifier");
+     if (fDebug)
+     {
+-        printf("ComputeNextStakeModifier: prev modifier=0x%016"PRIx64" time=%s\n", nStakeModifier, DateTimeStrFormat(nModifierTime).c_str());
++        printf("ComputeNextStakeModifier: prev modifier=0x%016" PRIx64 " time=%s\n", nStakeModifier, DateTimeStrFormat(nModifierTime).c_str());
+     }
+     if (nModifierTime / nModifierInterval >= pindexPrev->GetBlockTime() / nModifierInterval)
+         return true;
+@@ -198,7 +198,7 @@
+     }
+     if (fDebug)
+     {
+-        printf("ComputeNextStakeModifier: new modifier=0x%016"PRIx64" time=%s\n", nStakeModifierNew, DateTimeStrFormat(pindexPrev->GetBlockTime()).c_str());
++        printf("ComputeNextStakeModifier: new modifier=0x%016" PRIx64 " time=%s\n", nStakeModifierNew, DateTimeStrFormat(pindexPrev->GetBlockTime()).c_str());
+     }
+ 
+     nStakeModifier = nStakeModifierNew;
+@@ -296,12 +296,12 @@
+     hashProofOfStake = Hash(ss.begin(), ss.end());
+     if (fPrintProofOfStake)
+     {
+-        printf("CheckStakeKernelHash() : using modifier 0x%016"PRIx64" at height=%d timestamp=%s for block from height=%d timestamp=%s\n",
++        printf("CheckStakeKernelHash() : using modifier 0x%016" PRIx64 " at height=%d timestamp=%s for block from height=%d timestamp=%s\n",
+             nStakeModifier, nStakeModifierHeight,
+             DateTimeStrFormat(nStakeModifierTime).c_str(),
+             mapBlockIndex[hashBlockFrom]->nHeight,
+             DateTimeStrFormat(blockFrom.GetBlockTime()).c_str());
+-        printf("CheckStakeKernelHash() : check modifier=0x%016"PRIx64" nTimeBlockFrom=%u nTxPrevOffset=%u nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
++        printf("CheckStakeKernelHash() : check modifier=0x%016" PRIx64 " nTimeBlockFrom=%u nTxPrevOffset=%u nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
+             nStakeModifier,
+             nTimeBlockFrom, nTxPrevOffset, txPrev.nTime, prevout.n, nTimeTx,
+             hashProofOfStake.ToString().c_str());
+@@ -312,12 +312,12 @@
+         return false;
+     if (fDebug && !fPrintProofOfStake)
+     {
+-        printf("CheckStakeKernelHash() : using modifier 0x%016"PRIx64" at height=%d timestamp=%s for block from height=%d timestamp=%s\n",
++        printf("CheckStakeKernelHash() : using modifier 0x%016" PRIx64 " at height=%d timestamp=%s for block from height=%d timestamp=%s\n",
+             nStakeModifier, nStakeModifierHeight,
+             DateTimeStrFormat(nStakeModifierTime).c_str(),
+             mapBlockIndex[hashBlockFrom]->nHeight,
+             DateTimeStrFormat(blockFrom.GetBlockTime()).c_str());
+-        printf("CheckStakeKernelHash() : pass modifier=0x%016"PRIx64" nTimeBlockFrom=%u nTxPrevOffset=%u nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
++        printf("CheckStakeKernelHash() : pass modifier=0x%016" PRIx64 " nTimeBlockFrom=%u nTxPrevOffset=%u nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
+             nStakeModifier,
+             nTimeBlockFrom, nTxPrevOffset, txPrev.nTime, prevout.n, nTimeTx,
+             hashProofOfStake.ToString().c_str());
+@@ -373,11 +373,11 @@
+ 
+     if (fPrintProofOfStake)
+     {
+-        printf("CheckStakeKernelHash() : using modifier 0x%016"PRIx64" at height=%d timestamp=%s for block from timestamp=%s\n",
++        printf("CheckStakeKernelHash() : using modifier 0x%016" PRIx64 " at height=%d timestamp=%s for block from timestamp=%s\n",
+             nStakeModifier, nStakeModifierHeight,
+             DateTimeStrFormat(nStakeModifierTime).c_str(),
+             DateTimeStrFormat(nTimeBlockFrom).c_str());
+-        printf("CheckStakeKernelHash() : check modifier=0x%016"PRIx64" nTimeBlockFrom=%u nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
++        printf("CheckStakeKernelHash() : check modifier=0x%016" PRIx64 " nTimeBlockFrom=%u nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
+             nStakeModifier,
+             nTimeBlockFrom, txPrev.nTime, prevout.n, nTimeTx,
+             hashProofOfStake.ToString().c_str());
+@@ -391,11 +391,11 @@
+ 
+     if (fDebug && !fPrintProofOfStake)
+     {
+-        printf("CheckStakeKernelHash() : using modifier 0x%016"PRIx64" at height=%d timestamp=%s for block from timestamp=%s\n",
++        printf("CheckStakeKernelHash() : using modifier 0x%016" PRIx64 " at height=%d timestamp=%s for block from timestamp=%s\n",
+             nStakeModifier, nStakeModifierHeight,
+             DateTimeStrFormat(nStakeModifierTime).c_str(),
+             DateTimeStrFormat(nTimeBlockFrom).c_str());
+-        printf("CheckStakeKernelHash() : pass modifier=0x%016"PRIx64" nTimeBlockFrom=%u nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
++        printf("CheckStakeKernelHash() : pass modifier=0x%016" PRIx64 " nTimeBlockFrom=%u nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
+             nStakeModifier,
+             nTimeBlockFrom, txPrev.nTime, prevout.n, nTimeTx,
+             hashProofOfStake.ToString().c_str());
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/main.cpp iocoin/src/main.cpp
+--- iocoind/src/main.cpp	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/main.cpp	2019-03-31 23:08:43.959548104 -0500
+@@ -306,7 +306,7 @@
+ 
+     if (nSize > 5000)
+     {
+-        printf("ignoring large orphan tx (size: %"PRIszu", hash: %s)\n", nSize, hash.ToString().substr(0,10).c_str());
++        printf("ignoring large orphan tx (size: %" PRIszu ", hash: %s)\n", nSize, hash.ToString().substr(0,10).c_str());
+         return false;
+     }
+ 
+@@ -314,7 +314,7 @@
+     BOOST_FOREACH(const CTxIn& txin, tx.vin)
+         mapOrphanTransactionsByPrev[txin.prevout.hash].insert(hash);
+ 
+-    printf("stored orphan tx %s (mapsz %"PRIszu")\n", hash.ToString().substr(0,10).c_str(),
++    printf("stored orphan tx %s (mapsz %" PRIszu ")\n", hash.ToString().substr(0,10).c_str(),
+         mapOrphanTransactions.size());
+     return true;
+ }
+@@ -795,7 +795,7 @@
+ 
+         int64_t txMinFee = tx.GetMinFee(1000, GMF_RELAY, nSize);
+         if (nFees < txMinFee)
+-          return error("AcceptToMemoryPool : not enough fees %s, %"PRId64" < %"PRId64,
++          return error("AcceptToMemoryPool : not enough fees %s, %" PRId64 " < %" PRId64,
+             hash.ToString().c_str(),
+             nFees, txMinFee);
+ 
+@@ -849,7 +849,7 @@
+     if (ptxOld)
+         EraseFromWallets(ptxOld->GetHash());
+ 
+-    printf("AcceptToMemoryPool : accepted %s (poolsz %"PRIszu")\n",
++    printf("AcceptToMemoryPool : accepted %s (poolsz %" PRIszu ")\n",
+            hash.ToString().substr(0,10).c_str(),
+            pool.mapTx.size());
+     return true;
+@@ -1187,7 +1187,7 @@
+     }
+ 
+     if (fDebug && GetBoolArg("-printcreation"))
+-        printf("GetProofOfWorkReward() : create=%s nSubsidy=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nSubsidy);
++        printf("GetProofOfWorkReward() : create=%s nSubsidy=%" PRId64 "\n", FormatMoney(nSubsidy).c_str(), nSubsidy);
+ 
+     return nSubsidy + nFees;
+ }
+@@ -1278,7 +1278,7 @@
+     }
+ 
+     if (fDebug && GetBoolArg("-printcreation"))
+-        printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
++        printf("GetProofOfStakeReward(): create=%s nCoinAge=%" PRId64 "\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
+ 
+     return nSubsidy + nFees;
+ }
+@@ -1514,11 +1514,11 @@
+     uint256 nBestInvalidBlockTrust = pindexNew->nChainTrust - pindexNew->pprev->nChainTrust;
+     uint256 nBestBlockTrust = pindexBest->nHeight != 0 ? (pindexBest->nChainTrust - pindexBest->pprev->nChainTrust) : pindexBest->nChainTrust;
+ 
+-    printf("InvalidChainFound: invalid block=%s  height=%d  trust=%s  blocktrust=%"PRId64"  date=%s\n",
++    printf("InvalidChainFound: invalid block=%s  height=%d  trust=%s  blocktrust=%" PRId64 "  date=%s\n",
+       pindexNew->GetBlockHash().ToString().substr(0,20).c_str(), pindexNew->nHeight,
+       CBigNum(pindexNew->nChainTrust).ToString().c_str(), nBestInvalidBlockTrust.Get64(),
+       DateTimeStrFormat("%x %H:%M:%S", pindexNew->GetBlockTime()).c_str());
+-    printf("InvalidChainFound:  current best=%s  height=%d  trust=%s  blocktrust=%"PRId64"  date=%s\n",
++    printf("InvalidChainFound:  current best=%s  height=%d  trust=%s  blocktrust=%" PRId64 "  date=%s\n",
+       hashBestChain.ToString().substr(0,20).c_str(), nBestHeight,
+       CBigNum(pindexBest->nChainTrust).ToString().c_str(),
+       nBestBlockTrust.Get64(),
+@@ -1640,7 +1640,7 @@
+             // Revisit this if/when transaction replacement is implemented and allows
+             // adding inputs:
+             fInvalid = true;
+-            return DoS(100, error("FetchInputs() : %s prevout.n out of range %d %"PRIszu" %"PRIszu" prev tx %s\n%s", GetHash().ToString().substr(0,10).c_str(), prevout.n, txPrev.vout.size(), txindex.vSpent.size(), prevout.hash.ToString().substr(0,10).c_str(), txPrev.ToString().c_str()));
++            return DoS(100, error("FetchInputs() : %s prevout.n out of range %d %" PRIszu " %" PRIszu " prev tx %s\n%s", GetHash().ToString().substr(0,10).c_str(), prevout.n, txPrev.vout.size(), txindex.vSpent.size(), prevout.hash.ToString().substr(0,10).c_str(), txPrev.ToString().c_str()));
+         }
+     }
+ 
+@@ -1711,7 +1711,7 @@
+             CTransaction& txPrev = inputs[prevout.hash].second;
+ 
+             if (prevout.n >= txPrev.vout.size() || prevout.n >= txindex.vSpent.size())
+-                return DoS(100, error("ConnectInputs() : %s prevout.n out of range %d %"PRIszu" %"PRIszu" prev tx %s\n%s", GetHash().ToString().substr(0,10).c_str(), prevout.n, txPrev.vout.size(), txindex.vSpent.size(), prevout.hash.ToString().substr(0,10).c_str(), txPrev.ToString().c_str()));
++                return DoS(100, error("ConnectInputs() : %s prevout.n out of range %d %" PRIszu " %" PRIszu " prev tx %s\n%s", GetHash().ToString().substr(0,10).c_str(), prevout.n, txPrev.vout.size(), txindex.vSpent.size(), prevout.hash.ToString().substr(0,10).c_str(), txPrev.ToString().c_str()));
+ 
+             // If prev is coinbase or coinstake, check that it's matured
+             if (txPrev.IsCoinBase() || txPrev.IsCoinStake())
+@@ -1949,7 +1949,7 @@
+         int64_t nReward = GetProofOfWorkReward(GetPowHeight(pindex), nFees);
+         // Check coinbase reward
+         if (vtx[0].GetValueOut() > nReward)
+-            return DoS(50, error("ConnectBlock() : coinbase reward exceeded (actual=%"PRId64" vs calculated=%"PRId64")",
++            return DoS(50, error("ConnectBlock() : coinbase reward exceeded (actual=%" PRId64 " vs calculated=%" PRId64 ")",
+                    vtx[0].GetValueOut(),
+                    nReward));
+     }
+@@ -1963,7 +1963,7 @@
+         int64_t nCalculatedStakeReward = GetProofOfStakeReward(nCoinAge, nFees, pindex->nHeight);
+ 
+         if (nStakeReward > nCalculatedStakeReward)
+-            return DoS(100, error("ConnectBlock() : coinstake pays too much(actual=%"PRId64" vs calculated=%"PRId64")", nStakeReward, nCalculatedStakeReward));
++            return DoS(100, error("ConnectBlock() : coinstake pays too much(actual=%" PRId64 " vs calculated=%" PRId64 ")", nStakeReward, nCalculatedStakeReward));
+     }
+ 
+     // ppcoin: track money supply and mint amount info
+@@ -2028,8 +2028,8 @@
+         vConnect.push_back(pindex);
+     reverse(vConnect.begin(), vConnect.end());
+ 
+-    printf("REORGANIZE: Disconnect %"PRIszu" blocks; %s..%s\n", vDisconnect.size(), pfork->GetBlockHash().ToString().substr(0,20).c_str(), pindexBest->GetBlockHash().ToString().substr(0,20).c_str());
+-    printf("REORGANIZE: Connect %"PRIszu" blocks; %s..%s\n", vConnect.size(), pfork->GetBlockHash().ToString().substr(0,20).c_str(), pindexNew->GetBlockHash().ToString().substr(0,20).c_str());
++    printf("REORGANIZE: Disconnect %" PRIszu " blocks; %s..%s\n", vDisconnect.size(), pfork->GetBlockHash().ToString().substr(0,20).c_str(), pindexBest->GetBlockHash().ToString().substr(0,20).c_str());
++    printf("REORGANIZE: Connect %" PRIszu " blocks; %s..%s\n", vConnect.size(), pfork->GetBlockHash().ToString().substr(0,20).c_str(), pindexNew->GetBlockHash().ToString().substr(0,20).c_str());
+ 
+     // Disconnect shorter branch
+     list<CTransaction> vResurrect;
+@@ -2164,7 +2164,7 @@
+         }
+ 
+         if (!vpindexSecondary.empty())
+-            printf("Postponing %"PRIszu" reconnects\n", vpindexSecondary.size());
++            printf("Postponing %" PRIszu " reconnects\n", vpindexSecondary.size());
+ 
+         // Switch to new best branch
+         if (!Reorganize(txdb, pindexIntermediate))
+@@ -2212,7 +2212,7 @@
+ 
+     uint256 nBestBlockTrust = pindexBest->nHeight != 0 ? (pindexBest->nChainTrust - pindexBest->pprev->nChainTrust) : pindexBest->nChainTrust;
+ 
+-    printf("SetBestChain: new best=%s  height=%d  trust=%s  blocktrust=%"PRId64"  date=%s\n",
++    printf("SetBestChain: new best=%s  height=%d  trust=%s  blocktrust=%" PRId64 "  date=%s\n",
+       hashBestChain.ToString().substr(0,20).c_str(), nBestHeight,
+       CBigNum(nBestChainTrust).ToString().c_str(),
+       nBestBlockTrust.Get64(),
+@@ -2276,7 +2276,7 @@
+         bnCentSecond += CBigNum(nValueIn) * (nTime-txPrev.nTime) / CENT;
+ 
+         if (fDebug && GetBoolArg("-printcoinage"))
+-            printf("coin age nValueIn=%"PRId64" nTimeDiff=%d bnCentSecond=%s\n", nValueIn, nTime - txPrev.nTime, bnCentSecond.ToString().c_str());
++            printf("coin age nValueIn=%" PRId64 " nTimeDiff=%d bnCentSecond=%s\n", nValueIn, nTime - txPrev.nTime, bnCentSecond.ToString().c_str());
+     }
+ 
+     CBigNum bnCoinDay = bnCentSecond * CENT / COIN / (24 * 60 * 60);
+@@ -2333,7 +2333,7 @@
+         bnCentSecond += CBigNum(nValueIn) * (nTime-txPrev.nTime) / CENT;
+ 
+         if (fDebug && GetBoolArg("-printcoinage"))
+-          printf("coin age nValueIn=%"PRId64" nTimeDiff=%d bnCentSecond=%s\n", nValueIn, nTime - txPrev.nTime, bnCentSecond.ToString().c_str());
++          printf("coin age nValueIn=%" PRId64 " nTimeDiff=%d bnCentSecond=%s\n", nValueIn, nTime - txPrev.nTime, bnCentSecond.ToString().c_str());
+       }
+     }
+ 
+@@ -2381,7 +2381,7 @@
+     pindexNew->SetStakeModifier(nStakeModifier, fGeneratedStakeModifier);
+     pindexNew->nStakeModifierChecksum = GetStakeModifierChecksum(pindexNew);
+     if (!CheckStakeModifierCheckpoints(pindexNew->nHeight, pindexNew->nStakeModifierChecksum))
+-        return error("AddToBlockIndex() : Rejected by stake modifier checkpoint height=%d, modifier=0x%016"PRIx64, pindexNew->nHeight, nStakeModifier);
++        return error("AddToBlockIndex() : Rejected by stake modifier checkpoint height=%d, modifier=0x%016" PRIx64, pindexNew->nHeight, nStakeModifier);
+ 
+     // Add to mapBlockIndex
+     map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.insert(make_pair(hash, pindexNew)).first;
+@@ -2535,7 +2535,7 @@
+ 
+     // Check coinstake timestamp
+     if (IsProofOfStake() && !CheckCoinStakeTimestamp(nHeight, GetBlockTime(), (int64_t)vtx[1].nTime))
+-      return DoS(50, error("AcceptBlock() : coinstake timestamp violation nTimeBlock=%"PRId64" nTimeTx=%u", GetBlockTime(), vtx[1].nTime));
++      return DoS(50, error("AcceptBlock() : coinstake timestamp violation nTimeBlock=%" PRId64 " nTimeTx=%u", GetBlockTime(), vtx[1].nTime));
+ 
+     //we need to know fees to calculate new target
+     int64_t nFees = 0;
+@@ -3123,7 +3123,7 @@
+         // print item
+         CBlock block;
+         block.ReadFromDisk(pindex);
+-        printf("%d (%u,%u) %s  %08x  %s  mint %7s  tx %"PRIszu"",
++        printf("%d (%u,%u) %s  %08x  %s  mint %7s  tx %" PRIszu "",
+             pindex->nHeight,
+             pindex->nFile,
+             pindex->nBlockPos,
+@@ -3208,7 +3208,7 @@
+                    __PRETTY_FUNCTION__);
+         }
+     }
+-    printf("Loaded %i blocks from external file in %"PRId64"ms\n", nLoaded, GetTimeMillis() - nStart);
++    printf("Loaded %i blocks from external file in %" PRId64 "ms\n", nLoaded, GetTimeMillis() - nStart);
+     return nLoaded > 0;
+ }
+ 
+@@ -3314,7 +3314,7 @@
+     static map<CService, CPubKey> mapReuseKey;
+     RandAddSeedPerfmon();
+     if (fDebug)
+-        printf("received: %s (%"PRIszu" bytes)\n", strCommand.c_str(), vRecv.size());
++        printf("received: %s (%" PRIszu " bytes)\n", strCommand.c_str(), vRecv.size());
+     if (mapArgs.count("-dropmessagestest") && GetRand(atoi(mapArgs["-dropmessagestest"])) == 0)
+     {
+         printf("dropmessagestest DROPPING RECV MESSAGE\n");
+@@ -3471,7 +3471,7 @@
+         if (vAddr.size() > 1000)
+         {
+             pfrom->Misbehaving(20);
+-            return error("message addr size() = %"PRIszu"", vAddr.size());
++            return error("message addr size() = %" PRIszu "", vAddr.size());
+         }
+ 
+         // Store the new addresses
+@@ -3533,7 +3533,7 @@
+         if (vInv.size() > MAX_INV_SZ)
+         {
+             pfrom->Misbehaving(20);
+-            return error("message inv size() = %"PRIszu"", vInv.size());
++            return error("message inv size() = %" PRIszu "", vInv.size());
+         }
+ 
+         // find last block in inv vector
+@@ -3583,11 +3583,11 @@
+         if (vInv.size() > MAX_INV_SZ)
+         {
+             pfrom->Misbehaving(20);
+-            return error("message getdata size() = %"PRIszu"", vInv.size());
++            return error("message getdata size() = %" PRIszu "", vInv.size());
+         }
+ 
+         if (fDebugNet || (vInv.size() != 1))
+-            printf("received getdata (%"PRIszu" invsz)\n", vInv.size());
++            printf("received getdata (%" PRIszu " invsz)\n", vInv.size());
+ 
+         BOOST_FOREACH(const CInv& inv, vInv)
+         {
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/main.h iocoin/src/main.h
+--- iocoind/src/main.h	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/main.h	2019-03-31 23:08:43.959548104 -0500
+@@ -671,7 +671,7 @@
+     {
+         std::string str;
+         str += IsCoinBase()? "Coinbase" : (IsCoinStake()? "Coinstake" : "CTransaction");
+-        str += strprintf("(hash=%s, nTime=%d, ver=%d, vin.size=%"PRIszu", vout.size=%"PRIszu", nLockTime=%d, strTxInfo=%s)\n",
++        str += strprintf("(hash=%s, nTime=%d, ver=%d, vin.size=%" PRIszu ", vout.size=%" PRIszu ", nLockTime=%d, strTxInfo=%s)\n",
+             GetHash().ToString().substr(0,10).c_str(),
+             nTime,
+             nVersion,
+@@ -1115,7 +1115,7 @@
+ 
+     void print() const
+     {
+-        printf("CBlock(hash=%s, ver=%d, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, vtx=%"PRIszu", vchBlockSig=%s)\n",
++        printf("CBlock(hash=%s, ver=%d, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, vtx=%" PRIszu ", vchBlockSig=%s)\n",
+             GetHash().ToString().c_str(),
+             nVersion,
+             hashPrevBlock.ToString().c_str(),
+@@ -1367,7 +1367,7 @@
+ 
+     std::string ToString() const
+     {
+-        return strprintf("CBlockIndex(nprev=%p, pnext=%p, nFile=%u, nBlockPos=%-6d nHeight=%d, nMint=%s, nMoneySupply=%s, nFlags=(%s)(%d)(%s), nStakeModifier=%016"PRIx64", nStakeModifierChecksum=%08x, hashProof=%s, prevoutStake=(%s), nStakeTime=%d merkle=%s, hashBlock=%s)",
++        return strprintf("CBlockIndex(nprev=%p, pnext=%p, nFile=%u, nBlockPos=%-6d nHeight=%d, nMint=%s, nMoneySupply=%s, nFlags=(%s)(%d)(%s), nStakeModifier=%016" PRIx64 ", nStakeModifierChecksum=%08x, hashProof=%s, prevoutStake=(%s), nStakeTime=%d merkle=%s, hashBlock=%s)",
+             pprev, pnext, nFile, nBlockPos, nHeight,
+             FormatMoney(nMint).c_str(), FormatMoney(nMoneySupply).c_str(),
+             GeneratedStakeModifier() ? "MOD" : "-", GetStakeEntropyBit(), IsProofOfStake()? "PoS" : "PoW",
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/miner.cpp iocoin/src/miner.cpp
+--- iocoind/src/miner.cpp	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/miner.cpp	2019-03-31 23:08:43.963548104 -0500
+@@ -360,7 +360,7 @@
+         nLastBlockSize = nBlockSize;
+ 
+         if (fDebug && GetBoolArg("-printpriority"))
+-            printf("CreateNewBlock(): total size %"PRIu64"\n", nBlockSize);
++            printf("CreateNewBlock(): total size %" PRIu64 "\n", nBlockSize);
+ 
+         if (!fProofOfStake)
+             pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(nHeight, nFees);
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/net.cpp iocoin/src/net.cpp
+--- iocoind/src/net.cpp	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/net.cpp	2019-03-31 23:08:43.959548104 -0500
+@@ -1109,10 +1109,14 @@
+ #ifndef UPNPDISCOVER_SUCCESS
+     /* miniupnpc 1.5 */
+     devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0);
+-#else
++#elif MINIUPNPC_API_VERSION < 14
+     /* miniupnpc 1.6 */
+     int error = 0;
+     devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0, 0, &error);
++#else
++    /* miniupnpc 1.9.20150730 */
++    int error = 0;
++    devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0, 0, 2, &error);
+ #endif
+ 
+     struct UPNPUrls urls;
+@@ -1223,7 +1227,7 @@
+     CAddrDB adb;
+     adb.Write(addrman);
+ 
+-    printf("Flushed %d addresses to peers.dat  %"PRId64"ms\n",
++    printf("Flushed %d addresses to peers.dat  %" PRId64 "ms\n",
+            addrman.size(), GetTimeMillis() - nStart);
+ }
+ 
+@@ -1759,7 +1763,7 @@
+             }
+         }
+     }
+-#else
++#elif (HAVE_DECL_GETIFADDRS && HAVE_DECL_FREEIFADDRS)
+     // Get local host ip
+     struct ifaddrs* myaddrs;
+     if (getifaddrs(&myaddrs) == 0)
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/net.h iocoin/src/net.h
+--- iocoind/src/net.h	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/net.h	2019-03-31 23:08:43.959548104 -0500
+@@ -377,7 +377,7 @@
+         // the key is the earliest time the request can be sent
+         int64_t& nRequestTime = mapAlreadyAskedFor[inv];
+         if (fDebugNet)
+-            printf("askfor %s   %"PRId64" (%s)\n", inv.ToString().c_str(), nRequestTime, DateTimeStrFormat("%H:%M:%S", nRequestTime/1000000).c_str());
++            printf("askfor %s   %" PRId64 " (%s)\n", inv.ToString().c_str(), nRequestTime, DateTimeStrFormat("%H:%M:%S", nRequestTime/1000000).c_str());
+ 
+         // Make sure not to reuse time indexes to keep things in the same order
+         int64_t nNow = (GetTime() - 1) * 1000000;
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/reactor_relay.h iocoin/src/reactor_relay.h
+--- iocoind/src/reactor_relay.h	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/reactor_relay.h	2019-03-31 23:08:43.959548104 -0500
+@@ -50,7 +50,7 @@
+   template<int N>
+   void operator()() 
+   {
+-    return N;
++    //return N;
+   }
+ };
+ 
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/rpcblockchain.cpp iocoin/src/rpcblockchain.cpp
+--- iocoind/src/rpcblockchain.cpp	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/rpcblockchain.cpp	2019-03-31 23:08:43.963548104 -0500
+@@ -135,7 +135,7 @@
+     result.push_back(Pair("flags", strprintf("%s%s", blockindex->IsProofOfStake()? "proof-of-stake" : "proof-of-work", blockindex->GeneratedStakeModifier()? " stake-modifier": "")));
+     result.push_back(Pair("proofhash", blockindex->hashProof.GetHex()));
+     result.push_back(Pair("entropybit", (int)blockindex->GetStakeEntropyBit()));
+-    result.push_back(Pair("modifier", strprintf("%016"PRIx64, blockindex->nStakeModifier)));
++    result.push_back(Pair("modifier", strprintf("%016" PRIx64, blockindex->nStakeModifier)));
+     result.push_back(Pair("modifierchecksum", strprintf("%08x", blockindex->nStakeModifierChecksum)));
+     Array txinfo;
+     BOOST_FOREACH (const CTransaction& tx, block.vtx)
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/rpcnet.cpp iocoin/src/rpcnet.cpp
+--- iocoind/src/rpcnet.cpp	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/rpcnet.cpp	2019-03-31 23:08:43.963548104 -0500
+@@ -52,7 +52,7 @@
+         Object obj;
+ 
+         obj.push_back(Pair("addr", stats.addrName));
+-        obj.push_back(Pair("services", strprintf("%08"PRIx64, stats.nServices)));
++        obj.push_back(Pair("services", strprintf("%08" PRIx64, stats.nServices)));
+         obj.push_back(Pair("lastsend", (int64_t)stats.nLastSend));
+         obj.push_back(Pair("lastrecv", (int64_t)stats.nLastRecv));
+         obj.push_back(Pair("conntime", (int64_t)stats.nTimeConnected));
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/rpcwallet.cpp iocoin/src/rpcwallet.cpp
+--- iocoind/src/rpcwallet.cpp	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/rpcwallet.cpp	2019-03-31 23:08:43.963548104 -0500
+@@ -1422,7 +1422,7 @@
+     if ((int)keys.size() < nRequired)
+         throw runtime_error(
+             strprintf("not enough keys supplied "
+-                      "(got %"PRIszu" keys, but need at least %d to redeem)", keys.size(), nRequired));
++                      "(got %" PRIszu " keys, but need at least %d to redeem)", keys.size(), nRequired));
+     std::vector<CKey> pubkeys;
+     pubkeys.resize(keys.size());
+     for (unsigned int i = 0; i < keys.size(); i++)
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/txdb-leveldb.cpp iocoin/src/txdb-leveldb.cpp
+--- iocoind/src/txdb-leveldb.cpp	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/txdb-leveldb.cpp	2019-03-31 23:08:43.963548104 -0500
+@@ -406,7 +406,7 @@
+         // NovaCoin: calculate stake modifier checksum
+         pindex->nStakeModifierChecksum = GetStakeModifierChecksum(pindex);
+         if (!CheckStakeModifierCheckpoints(pindex->nHeight, pindex->nStakeModifierChecksum))
+-            return error("CTxDB::LoadBlockIndex() : Failed stake modifier checkpoint height=%d, modifier=0x%016"PRIx64, pindex->nHeight, pindex->nStakeModifier);
++            return error("CTxDB::LoadBlockIndex() : Failed stake modifier checkpoint height=%d, modifier=0x%016" PRIx64, pindex->nHeight, pindex->nStakeModifier);
+     }
+ 
+     // Load hashBestChain pointer to end of best chain
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/util.cpp iocoin/src/util.cpp
+--- iocoind/src/util.cpp	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/util.cpp	2019-03-31 23:08:43.963548104 -0500
+@@ -618,7 +618,7 @@
+     int64_t n_abs = (n > 0 ? n : -n);
+     int64_t quotient = n_abs/COIN;
+     int64_t remainder = n_abs%COIN;
+-    string str = strprintf("%"PRId64".%08"PRId64, quotient, remainder);
++    string str = strprintf("%" PRId64 ".%08" PRId64, quotient, remainder);
+ 
+ 
+     int nTrim = 0;
+@@ -1421,7 +1421,7 @@
+ 
+ 
+     vTimeOffsets.input(nOffsetSample);
+-    printf("Added time data, samples %d, offset %+"PRId64" (%+"PRId64" minutes)\n", vTimeOffsets.size(), nOffsetSample, nOffsetSample/60);
++    printf("Added time data, samples %d, offset %+" PRId64 " (%+" PRId64 " minutes)\n", vTimeOffsets.size(), nOffsetSample, nOffsetSample/60);
+     if (vTimeOffsets.size() >= 5 && vTimeOffsets.size() % 2 == 1)
+     {
+         int64_t nMedian = vTimeOffsets.median();
+@@ -1456,10 +1456,10 @@
+         }
+         if (fDebug) {
+             BOOST_FOREACH(int64_t n, vSorted)
+-                printf("%+"PRId64"  ", n);
++                printf("%+" PRId64 "  ", n);
+             printf("|  ");
+         }
+-        printf("nTimeOffset = %+"PRId64"  (%+"PRId64" minutes)\n", nTimeOffset, nTimeOffset/60);
++        printf("nTimeOffset = %+" PRId64 "  (%+" PRId64 " minutes)\n", nTimeOffset, nTimeOffset/60);
+     }
+ }
+ 
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/util.h iocoin/src/util.h
+--- iocoind/src/util.h	2019-03-31 23:08:43.523548122 -0500
++++ iocoin/src/util.h	2019-03-31 23:08:43.963548104 -0500
+@@ -240,7 +240,7 @@
+ 
+ inline std::string i64tostr(int64_t n)
+ {
+-    return strprintf("%"PRId64, n);
++    return strprintf("%" PRId64, n);
+ }
+ 
+ inline std::string itostr(int n)
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/wallet.cpp iocoin/src/wallet.cpp
+--- iocoind/src/wallet.cpp	2019-03-31 23:09:39.551545766 -0500
++++ iocoin/src/wallet.cpp	2019-03-31 23:08:43.963548104 -0500
+@@ -258,7 +258,7 @@
+     if (redeemScript.size() > MAX_SCRIPT_ELEMENT_SIZE)
+     {
+   std::string strAddr = cba(redeemScript.GetID()).ToString();
+-  printf("%s: Warning: This wallet contains a redeemScript of size %"PRIszu" which exceeds maximum size %i thus can never be redeemed. Do not use address %s.\n",
++  printf("%s: Warning: This wallet contains a redeemScript of size %" PRIszu " which exceeds maximum size %i thus can never be redeemed. Do not use address %s.\n",
+       __func__, redeemScript.size(), MAX_SCRIPT_ELEMENT_SIZE, strAddr.c_str());
+   return true;
+     }
+@@ -1078,7 +1078,7 @@
+ 	      // Update fSpent if a tx got spent somewhere else by a copy of wallet.dat
+ 	      if (txindex.vSpent.size() != wtx.vout.size())
+ 	      {
+-		  printf("ERROR: ReacceptWalletTransactions() : txindex.vSpent.size() %"PRIszu" != wtx.vout.size() %"PRIszu"\n", txindex.vSpent.size(), wtx.vout.size());
++		  printf("ERROR: ReacceptWalletTransactions() : txindex.vSpent.size() %" PRIszu " != wtx.vout.size() %" PRIszu "\n", txindex.vSpent.size(), wtx.vout.size());
+ 		  continue;
+ 	      }
+ 	      for (unsigned int i = 0; i < txindex.vSpent.size(); i++)
+@@ -1443,7 +1443,7 @@
+ 
+       if (pcoin->nTime > nSpendTime)
+       {
+-	  printf("pcoin->nTime %"PRId64", nSpendTime %"PRId64"\n", pcoin->nTime, nSpendTime);
++	  printf("pcoin->nTime %" PRId64 ", nSpendTime %" PRId64 "\n", pcoin->nTime, nSpendTime);
+ 	  continue;
+       }
+ 
+@@ -2384,12 +2384,12 @@
+       if (block.IsProofOfWork() && mapWallet.count(block.vtx[0].GetHash()))
+       {
+ 	  __wx__Tx& wtx = mapWallet[block.vtx[0].GetHash()];
+-	  printf("    mine:  %d  %d  %"PRId64"", wtx.GetDepthInMainChain(), wtx.GetBlocksToMaturity(), wtx.GetCredit());
++	  printf("    mine:  %d  %d  %" PRId64 "", wtx.GetDepthInMainChain(), wtx.GetBlocksToMaturity(), wtx.GetCredit());
+       }
+       if (block.IsProofOfStake() && mapWallet.count(block.vtx[1].GetHash()))
+       {
+ 	  __wx__Tx& wtx = mapWallet[block.vtx[1].GetHash()];
+-	  printf("    stake: %d  %d  %"PRId64"", wtx.GetDepthInMainChain(), wtx.GetBlocksToMaturity(), wtx.GetCredit());
++	  printf("    stake: %d  %d  %" PRId64 "", wtx.GetDepthInMainChain(), wtx.GetBlocksToMaturity(), wtx.GetCredit());
+        }
+ 
+   }
+@@ -2452,7 +2452,7 @@
+ 	  walletdb.WritePool(nIndex, CKeyPool(GenerateNewKey()));
+ 	  setKeyPool.insert(nIndex);
+       }
+-      printf("__wx__::NewKeyPool wrote %"PRId64" new keys\n", nKeys);
++      printf("__wx__::NewKeyPool wrote %" PRId64 " new keys\n", nKeys);
+   }
+   return true;
+ }
+@@ -2482,7 +2482,7 @@
+ 	  if (!walletdb.WritePool(nEnd, CKeyPool(GenerateNewKey())))
+ 	      throw runtime_error("TopUpKeyPool() : writing generated key failed");
+ 	  setKeyPool.insert(nEnd);
+-	  printf("keypool added key %"PRId64", size=%"PRIszu"\n", nEnd, setKeyPool.size());
++	  printf("keypool added key %" PRId64 ", size=%" PRIszu "\n", nEnd, setKeyPool.size());
+       }
+   }
+   return true;
+@@ -2512,7 +2512,7 @@
+ 	  throw runtime_error("ReserveKeyFromKeyPool() : unknown key in key pool");
+       assert(keypool.vchPubKey.IsValid());
+       if (fDebug && GetBoolArg("-printkeypool"))
+-	  printf("keypool reserve %"PRId64"\n", nIndex);
++	  printf("keypool reserve %" PRId64 "\n", nIndex);
+   }
+ }
+ 
+@@ -2540,7 +2540,7 @@
+       walletdb.ErasePool(nIndex);
+   }
+   if(fDebug)
+-      printf("keypool keep %"PRId64"\n", nIndex);
++      printf("keypool keep %" PRId64 "\n", nIndex);
+ }
+ 
+ void __wx__::ReturnKey(int64_t nIndex)
+@@ -2551,7 +2551,7 @@
+       setKeyPool.insert(nIndex);
+   }
+   if(fDebug)
+-      printf("keypool return %"PRId64"\n", nIndex);
++      printf("keypool return %" PRId64 "\n", nIndex);
+ }
+ 
+ bool __wx__::GetKeyFromPool(CPubKey& r1, CPubKey& r2, bool fAllowReuse)
+diff -ruN '--exclude=leveldb' '--exclude=obj' iocoind/src/walletdb.cpp iocoin/src/walletdb.cpp
+--- iocoind/src/walletdb.cpp	2019-03-31 23:09:39.551545766 -0500
++++ iocoin/src/walletdb.cpp	2019-03-31 23:08:43.963548104 -0500
+@@ -593,7 +593,7 @@
+                         bitdb.CheckpointLSN(strFile);
+ 
+                         bitdb.mapFileUseCount.erase(mi++);
+-                        printf("Flushed wallet.dat %"PRId64"ms\n", GetTimeMillis() - nStart);
++                        printf("Flushed wallet.dat %" PRId64 "ms\n", GetTimeMillis() - nStart);
+                     }
+                 }
+             }
+@@ -654,7 +654,7 @@
+     // Set -rescan so any missing transactions will be
+     // found.
+     int64_t now = GetTime();
+-    std::string newFilename = strprintf("wallet.%"PRId64".bak", now);
++    std::string newFilename = strprintf("wallet.%" PRId64 ".bak", now);
+ 
+     int result = dbenv.dbenv.dbrename(NULL, filename.c_str(), NULL,
+                                       newFilename.c_str(), DB_AUTO_COMMIT);
+@@ -673,7 +673,7 @@
+         printf("Salvage(aggressive) found no records in %s.\n", newFilename.c_str());
+         return false;
+     }
+-    printf("Salvage(aggressive) found %"PRIszu" records\n", salvagedData.size());
++    printf("Salvage(aggressive) found %" PRIszu " records\n", salvagedData.size());
+ 
+     bool fSuccess = allOK;
+     Db* pdbCopy = new Db(&dbenv.dbenv, 0);
