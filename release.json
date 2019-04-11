@@ -1,0 +1,9 @@
+{
+"daemon":"aurora",
+"commit":"e7de3f2086531983ecaca1708e723ee0c69d38bb",
+"releasePath":"https://github.com/IOCoinNetwork/ioc-CrossCompiler/releases/download/aurora/",
+"aarch64-linux-android_aurora.tar.gz":"f3db2cb5db0495ef408b5201042671db8b5159b2e5154acc749f51eb68fcedf9",
+"arm-linux-androideabi_aurora.tar.gz":"977f7dac9ca605b4fcd5bfbbc16bf470725f214488fecb71a83dd8fcd2a465c3",
+"i686-linux-android_aurora.tar.gz":"75cbf5e0db48c955f6cf70f69442a16a492dbea3fb0fe8935a7f8028a8183d35",
+"x86_64-linux-android_aurora.tar.gz":"736a3ac5d568474ae508ad5d203486e377fd7c65355418c2af599c6acaee0165"
+}
